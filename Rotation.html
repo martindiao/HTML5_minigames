@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="utf-8">
+<title></title>
+<script>
+function draw(id,deg){
+	var canvas = document.getElementById(id);
+	var context = canvas.getContext("2d");
+		context.fillStyle = "#eeeeef";
+		context.fillRect(0,0,1000,500);
+	var dx = 480;
+	var dy = 250;
+	var s = 100;
+	var dig = Math.PI / 15*11;
+	context.beginPath();
+	context.fillStyle = "rgb(220,20,60)";
+	context.strokeStyle = "rgb(255,215,0)";
+	for (var i = 0; i < 30; i++){
+		var x = Math.sin(i*dig+deg);
+		var y = Math.cos(i*dig+deg);
+		context.lineTo(dx+x*s,dy+y*s);
+	}
+	context.closePath();
+	context.fill();
+	context.stroke();
+}
+function whichButton(event){
+	var btnNum = event.button;
+	if (btnNum==0){
+		if (!ontransfer){
+			ontransfer = true;
+			dir = -dir;
+		}
+	}
+}
+</script>
+</head>
+<body onmousedown="whichButton(event)">
+<!--move to line to-->
+<canvas id="canvas" width="1000" height="500"></canvas>
+<script>
+var ddeg = Math.PI * 2 / 1440;
+var	dddeg = Math.PI * 2 / 1440 / 30;
+var degpos = 0.0;
+var ontransfer = false;
+var dir = -1;
+!function(){
+	if (!ontransfer){
+		draw("canvas",degpos);
+		degpos = degpos + ddeg;
+		if (degpos > Math.PI *2){degpos = degpos - Math.PI *2;}
+	}else{
+		ddeg = ddeg - dddeg*dir;
+		if (Math.abs(ddeg) > Math.PI * 2 / 1440){
+			ddeg = Math.round(Math.abs(ddeg)/ddeg)*Math.PI * 2 / 1440;
+			ontransfer = false;
+		}else{
+			draw("canvas",degpos);
+			degpos = degpos + ddeg;
+			if (degpos > Math.PI *2){degpos = degpos - Math.PI *2;}
+		}
+	}
+	setTimeout(arguments.callee,12);
+}();
+</script>
+</body>
+</html>
