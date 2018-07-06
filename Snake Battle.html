@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!-- saved from url=(0061)https://2234839.github.io/js/%E8%B4%AA%E5%90%83%E8%9B%87.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<style>
+			.headr{
+				position:relative;
+				left:770px;
+				top:-600px;
+				width:400px;
+				height:200px;
+				border:1px solid #f00;
+			}
+		</style>
+		<title></title>
+	</head>
+	<body>
+	<p>
+		<canvas id="can" width="600" height="600" style="background: Black"></canvas>
+		<canvas id="cant" width="600" height="600"></canvas>
+    <script>
+        var sn = [ 33, 32, 31 ], dz = 464, fx = 1, n, ctx = document.getElementById("can").getContext("2d"),ctxt = document.getElementById("cant").getContext("2d");
+				drawCircle(dz, "Yellow");  //生成第一个中心黄果子
+				var sn1 = [ 843, 842, 841 ], fx1 = 1, n1;
+				//sn用于存储蛇身以 及 下一个位置
+        //dz是果实位置
+        //fx是方向
+        //n是下一步的位置
+				//sn1,n1是P2-BLUE的数据
+				ctxt.font="40px HanWangT0001";
+				ctxt.fillStyle="Black";
+				ctxt.fillText("Snake Battle",10,40);
+				ctxt.font="14px Arial";
+				ctxt.fillStyle="Black";
+				ctxt.fillText("by Martindiao",320,40);
+				ctxt.font="20px HanWangT0001";
+				ctxt.fillStyle="Lime";
+				ctxt.fillText("P1-GREEN",10,70);
+				ctxt.font="20px Arial";
+				ctxt.fillStyle="Black";
+				ctxt.fillText("↑←↓→",10,90);
+				ctxt.font="20px HanWangT0001";
+				ctxt.fillStyle="Blue";
+				ctxt.fillText("P2-BLUE",10,120);
+				ctxt.font="20px Arial";
+				ctxt.fillStyle="Black";
+				ctxt.fillText("WASD",10,140);
+				ctxt.font="20px Arial";
+				ctxt.fillStyle="Black";
+				ctxt.fillText("RULES:",10,200);
+				ctxt.fillText("The one that hits the other loses, head to head brings a draw.",10,220);
+
+        function draw(t, c) {  //t==n   c是颜色
+            ctx.fillStyle = c;
+            ctx.fillRect(t % 30 * 20 + 1, ~~(t / 30) * 20 + 1, 18, 18); //可去小数 ~是按位取反运算，~~是取反两次
+            //t%30  求出第几列         ~~(t / 30)求出第几行
+        }
+
+				function drawCircle(t,c){//画圆
+		      ctx.beginPath();
+		      ctx.arc(t % 30 * 20 + 10,  ~~(t / 30) * 20 + 10, 9, 0, Math.PI*2, true);
+		      ctx.closePath();
+		      ctx.fillStyle = c;
+		      ctx.fill();
+			  }
+
+				document.onkeydown = function(e) {//按下 0左 1上 2右 3下
+						fx = (sn[1] - sn[0]) == (n = [ -1, -30, 1, 30 ][(e || event).keyCode - 37] || fx) ? fx : n ;
+						if ((e || event).keyCode==65)
+								fx1 = sn1[1] - sn1[0] == (n1 = [ -1, -30, 1, 30 ][0] || fx1) ? fx1 : n1 ;
+						if ((e || event).keyCode==87)
+								fx1 = sn1[1] - sn1[0] == (n1 = [ -1, -30, 1, 30 ][1] || fx1) ? fx1 : n1 ;
+						if ((e || event).keyCode==68)
+								fx1 = sn1[1] - sn1[0] == (n1 = [ -1, -30, 1, 30 ][2] || fx1) ? fx1 : n1 ;
+						if ((e || event).keyCode==83)
+								fx1 = sn1[1] - sn1[0] == (n1 = [ -1, -30, 1, 30 ][3] || fx1) ? fx1 : n1 ;
+			  // n  ==>  +1则右   +30则下  -1则左   -30则上
+				// a-65 w-87 d-68 s-83
+        };
+
+        !function() {//自执行函数表达式  立即执行
+						sn.unshift(n = sn[0] + fx);      //  前进一步     unshift() 方法可向数组的开头添加一个或更多元素，并返回新的长度。
+						sn1.unshift(n1 = sn1[0] + fx1);  //  前进一步     unshift() 方法可向数组的开头添加一个或更多元素，并返回新的长度。
+						if (sn1.indexOf(n, 1) > 0 || sn.indexOf(n, 1) > 0 || n<0||n>899 || fx == 1 && n % 30 == 0 || fx == -1 && n % 30 == 29)
+            		//从sn中除开始一位检测n出现的位置 /若下一步的位置是自己的身体  /超出上边际   /超过下边际 /左 /右6 -+
+            		//indexOf() 方法可返回某个指定的字符串值在字符串中首次出现的位置没找到返回-1
+								if (sn.indexOf(n1, 1) > 0 ||sn1.indexOf(n1, 1) > 0 || n1<0||n1>899 || fx1 == 1 && n1 % 30 == 0 || fx1 == -1 && n1 % 30 == 29)
+										return alert("DRAW...");
+								else
+                		return alert("BLUE WINS!!!");
+						if (sn.indexOf(n1, 1) > 0 ||sn1.indexOf(n1, 1) > 0 || n1<0||n1>899 || fx1 == 1 && n1 % 30 == 0 || fx1 == -1 && n1 % 30 == 29)
+            		//从sn1中除开始一位检测n出现的位置 /若下一步的位置是自己的身体  /超出上边际   /超过下边际 /左 /右6 -+
+            		//indexOf() 方法可返回某个指定的字符串值在字符串中首次出现的位置没找到返回-1
+								if (sn1.indexOf(n, 1) > 0 ||sn.indexOf(n, 1) > 0 || n<0||n>899 || fx == 1 && n % 30 == 0 || fx == -1 && n % 30 == 29)
+										return alert("DRAW...");
+								else
+		                return alert("GREEN WINS!!!");
+
+            //draw(n, "Lime"); //Lime：嫩绿色
+						drawCircle(n, "Lime");
+						drawCircle(n1, "Blue");
+						if (n == dz) {  // 如果果子 被吃掉了  随机一个位置 若存在于蛇身则再找一次
+								while (sn.indexOf(dz = ~~(Math.random() * 900)) >= 0);  //Math.random()返回0～1之间的随机数
+								drawCircle(dz, "Yellow");  //生成黄果子
+						}else{
+								draw(sn.pop(), "Black");  //sn.pop()删除并返回数组的最后一个    删除最后一位
+						}
+						if (n1 == dz) {  // 如果果子 被吃掉了  随机一个位置 若存在于蛇身则再找一次
+								while (sn1.indexOf(dz = ~~(Math.random() * 900)) >= 0);  //Math.random()返回0～1之间的随机数
+								drawCircle(dz, "Yellow");  //生成黄果子
+						}else{
+								draw(sn1.pop(), "Black");  //sn.pop()删除并返回数组的最后一个    删除最后一位
+						}
+            setTimeout(arguments.callee, 120);  //  调用自身     setTimeout() 方法用于在指定的毫秒数后调用函数或计算表达式
+        }(); //没有这个括号函数无法执行
+    </script>
+</body></html>
